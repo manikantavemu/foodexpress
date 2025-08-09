@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">FoodExpress</div>
+            <ul>
+                <li><button class="nav-btn" onclick="scrollToSection('home')">Home</button></li>
+                <li><button class="nav-btn" onclick="scrollToSection('menu')">Menu</button></li>
+                <li><button class="nav-btn" onclick="scrollToSection('about')">About</button></li>
+                <li><button class="nav-btn" onclick="scrollToSection('contact')">Contact</button></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="home" class="hero">
+        <h1>Delicious Food Delivered to Your Doorstep</h1>
+        <p>Fast, fresh, and hot meals available 24/7.</p>
+        <a href="#menu" class="btn">Order Now</a><br><br>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search for food..." style="width: 500px; height:30px;">
+            <button onclick="searchMenu()" style="width: 100px; height: 35px;">Search</button>
+        </div>
+    </section>
+    
+    <section id="menu" class="menu">
+        <h2>Our Menu</h2>
+        <div class="menu-items" id="menu-items">
+            <div class="item">
+                <img src="burger.jpg" alt="Burger">
+                <h3>Cheese Burger</h3>
+                <p>100.00/-</p>
+                <button class="order-btn" onclick="placeOrder('Cheese Burger', 100.00)">Order</button>
+            </div>
+            <div class="item">
+                <img src="pizza.jpg" alt="Pizza">
+                <h3>Pepperoni Pizza</h3>
+                <p>150.00/-</p>
+                <button class="order-btn" onclick="placeOrder('Pepperoni Pizza',150.00)">Order</button>
+            </div>
+            <div class="item">
+                <img src="pasta.jpg" alt="Pasta">
+                <h3>Creamy Pasta</h3>
+                <p>80.00/-</p>
+                <button class="order-btn" onclick="placeOrder('Creamy Pasta',80.00)">Order</button>
+            </div>
+            <div class="item">
+                <img src="chickenbiryani.jpg" alt="biryani">
+                <h3>Chicken biryani</h3>
+                <p>250.00/-</p>
+                <button class="order-btn" onclick="placeOrder('Chicken Biryani ',250.00)">Order</button>
+            </div>
+            <div class="item">
+                <img src="vegbiryani.jpg" alt="veg biryani">
+                <h3>Veg biryani</h3>
+                <p>200.00/-</p>
+                <button class="order-btn" onclick="placeOrder('veg Biryani ',200.00)">Order</button>
+            </div>
+            <div class="item">
+                <img src="chickencurry.jpg" alt="chicken curry">
+                <h3>Chicken curry</h3>
+                <p>180.00/-</p>
+                <button class="order-btn" onclick="placeOrder('Chicken curry ',180.00)">Order</button>
+            </div>
+
+        </div>
+    </section>
+    
+    <section id="about" class="about">
+        <h2>About Us</h2>
+        <p>We are dedicated to delivering high-quality meals made from the freshest ingredients, right to your doorstep.</p>
+    </section>
+    
+    
+    <section id="contact" class="contact">
+        <h2>Contact Us</h2>
+        <p>Email: support@foodexpress.com</p>
+        <p>Phone: +91 8978909166</p>
+        <p>Address: 123 Food Street, Flavor Town</p>
+    </section>
+    
+    <section id="order-summary" class="order-summary" style="border: 10px; background-color: bisque; border-radius: 10px;">
+        <h2>Order Summary</h2>
+       
+        <form id="delivery-form" style="text-align:left;">
+            <h3>Delivery Details</h3>
+            <div id="input">
+           Name:<input type="text" id="name" placeholder="Your Name" required><br>
+            <br>
+            Address:</Address><input type="text" id="address" placeholder="Delivery Address" required><br><br>
+            PH-NO<input type="tel" id="phone" placeholder="Phone Number" required><br><br>
+            
+            <h3>Payment Method</h3>
+            <select id="payment-method" required>
+                <option value="credit-card">Credit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="cod">Cash on Delivery</option>
+                <option value="paytm">Paytm</option>
+                
+            </select><br>
+            </div>
+        </form>
+        
+
+        
+
+           <center> <table>
+            <tr> <td><ul id="order-list"></ul></td></tr><br>
+            <tr><td><p>Total: ₹<span id="total-price">0.00</span></p></td></tr><br>
+            <tr><button onclick="checkout()">Checkout</button></tr>
+        
+
+        </table>
+           </center><!--<ul id="order-list"></ul>
+        <p>Total: ₹<span id="total-price">0.00</span></p>
+        <button onclick="checkout()">Checkout</button>-->
+    </section>
+    
+    <footer>
+        <p>&copy; 2024 FoodExpress. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        let totalPrice = 0;
+
+        function placeOrder(item, price) {
+            if (confirm(`Do you want to add ${item} to your cart for ₹${price.toFixed(2)}?`)) 
+            {
+                const orderList = document.getElementById("order-list");
+                const listItem = document.createElement("li");
+                listItem.innerHTML =`${item} - ₹${price.toFixed(2)} 
+                <button onclick="removeOrder(this,${price})">Remove</button>`
+                orderList.appendChild(listItem);
+                totalPrice += price;
+                document.getElementById("total-price").textContent = totalPrice.toFixed(2);
+            }
+        }
+
+        function removeOrder(button, price) {
+            const listItem = button.parentElement;
+            listItem.remove();
+            totalPrice -= price;
+            document.getElementById("total-price").textContent = totalPrice.toFixed(2);
+        }
+
+        function searchMenu() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const items = document.querySelectorAll(".menu-items .item");
+            let found = false;
+            items.forEach(item => {
+                const itemName = item.querySelector("h3").textContent.toLowerCase();
+                if (itemName.includes(query)) {
+                    item.style.display = "block";
+                    found = true;
+                } else {
+                    item.style.display = "none";
+                }
+            });
+
+            if (!found) {
+                alert("No results found.");
+            }
+        }
+
+    
+       function checkout() {
+    if (totalPrice === 0) {
+        alert("Your cart is empty! Please add items to your order.");
+        return;
+    }
+
+    // Get the values from the delivery detail input fields
+    const name = document.getElementById("name").value;
+    const address = document.getElementById("address").value;
+    const phone = document.getElementById("phone").value;
+    const paymentMethod = document.getElementById("payment-method").value;
+
+
+    // Check if any of the required fields are empty
+    if (!name || !address || !phone) {
+        alert("Please fill in all delivery details (Name, Address, and Phone Number) before proceeding.");
+        return; // Stop the function execution if fields are empty
+    }
+
+    if (paymentMethod === "cod") {
+        alert(`Thank you, ${name}! Your order for ₹${totalPrice.toFixed(2)} has been placed. Payment will be collected upon delivery.`);
+        // In a real application, you might also clear the order list here
+        document.getElementById("order-list").innerHTML = "";
+        totalPrice = 0;
+        document.getElementById("total-price").textContent = "0.00";
+    } else {
+        // Handle other payment methods
+        let paymentUrl = "";
+        switch (paymentMethod) {
+            case "credit-card":
+                alert(`Redirecting to credit card payment for ₹${totalPrice.toFixed(2)}...`);
+                // Placeholder for actual credit card gateway URL
+                // paymentUrl = `https://creditcard-gateway.com/pay?amount=${totalPrice.toFixed(2)}`;
+                break;
+            case "paypal":
+                alert(`Redirecting to PayPal for ₹${totalPrice.toFixed(2)}...`);
+                // Placeholder for actual PayPal gateway URL
+                // paymentUrl = `https://paypal.com/pay?amount=${totalPrice.toFixed(2)}`;
+                break;
+            case "paytm":
+                alert(`Redirecting to Paytm for ₹${totalPrice.toFixed(2)}...`);
+                paymentUrl = `https://paytm.com/pay?amount=${totalPrice.toFixed(2)}&purpose=food_order`;
+                break;
+            default:
+                alert("Please select a valid payment method.");
+                return;
+        }
+
+        if (paymentUrl) {
+            window.location.href = paymentUrl;
+        }
+    }
+}
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
